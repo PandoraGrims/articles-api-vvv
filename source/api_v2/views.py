@@ -59,46 +59,21 @@ class ArticleUpdateView(APIView):
     def put(self, request, pk, *args, **kwargs):
         article = get_object_or_404(Article, pk=pk)
         title = request.data.get('title')
-        text = request.data.get('text')
+        content = request.data.get('content')
 
-        # if title is None or text is None:
-        #     return Response({"message": "Both 'title' and 'text' fields are required for update."},
-        #                     status=status.HTTP_400_BAD_REQUEST)
+        if title is None or content is None:
+            return Response({"message": "Нужно обновить Название и/или Контент"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         article.title = title
-        article.text = text
-        article.save()
+        article.content = content
+
+        serializer = self.serializer_class(article, data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        article = serializer.save()
 
         return Response(self.serializer_class(article).data, status=status.HTTP_200_OK)
-
-
-# class ArticleUpdateView(APIView):
-#     serializer_class = ArticleModelSerializer
-#
-#     # def put(self, request, pk, *args, **kwargs):
-#     #     article = get_object_or_404(Article, pk=pk)
-#
-#     def put(self, request, pk, *args, **kwargs):
-#         article = get_object_or_404(Article, pk=pk)
-#         serializer = self.serializer_class(data=request.data, instance=article, partial=True)
-#         serializer.is_valid(raise_exception=True)
-#         article = serializer.save()
-#         return Response(self.serializer_class(article).data, status=status.HTTP_200_OK)
-
-# title = request.data.get('title')
-# text = request.data.get('text')
-
-# if title is None or text is None:
-#     return Response({"message": " Что бы обновить статью вам нужно заполнить Заголовок и Текст "},
-#                     status=status.HTTP_400_BAD_REQUEST)
-
-# article.title = title
-# article.text = text
-# serializer = self.serializer_class(data=request.data, instance=article)
-# serializer.is_valid(raise_exception=True)
-# article = serializer.save()
-# # article.save()
-# return Response(self.serializer_class(article).data, status=status.HTTP_200_OK)
 
 
 class ArticleDeleteView(APIView):
