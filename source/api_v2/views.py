@@ -1,6 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 
-# Create your views here.
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import status
@@ -31,8 +30,6 @@ class ArticleView(APIView):
         serializer.is_valid(raise_exception=True)
         article = serializer.save()
         return Response(self.serializer_class(article).data, status=status.HTTP_201_CREATED)
-        # else:
-        #     return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk, *args, **kwargs):
         article = get_object_or_404(Article, pk=pk)
@@ -40,8 +37,6 @@ class ArticleView(APIView):
         serializer.is_valid(raise_exception=True)
         article = serializer.save()
         return Response(self.serializer_class(article).data, status=status.HTTP_200_OK)
-        # else:
-        #     return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ArticleDetailView(APIView):
