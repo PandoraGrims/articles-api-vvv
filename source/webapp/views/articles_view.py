@@ -57,7 +57,6 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     form_class = ArticleForm
     template_name = "articles/create_article.html"
 
-
     # def dispatch(self, request, *args, **kwargs):
     #     result = super().dispatch(request, *args, **kwargs)
     #     if request.user.has_perm("webapp.add_article"):
@@ -97,7 +96,6 @@ class ArticleDeleteView(PermissionRequiredMixin, DeleteView):
     model = Article
     template_name = "articles/delete_article.html"
     success_url = reverse_lazy("webapp:index")
-
 
     def has_permission(self):
         return self.request.user.has_perm("webapp.delete_article") or \
